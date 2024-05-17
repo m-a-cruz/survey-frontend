@@ -8,6 +8,8 @@ import Dashboard from './components/dashboard';
 import Survey from './components/survey';
 import Login from './components/login';
 import Notfound from './components/notfound';
+import Survey1 from './components/surveyForms/survey1';
+import Survey2 from './components/surveyForms/survey2';
 
   const routers = createBrowserRouter([
   
@@ -24,8 +26,18 @@ import Notfound from './components/notfound';
           element: <Dashboard />,
         },
         {
-          path: "/survey",
+          path: "/survey/",
           element: <Survey />,
+          children: [
+            {
+              path: "/survey/1",
+              element: <Survey1 />
+            },
+            {
+              path: "/survey/2",
+              element: <Survey2 />
+            },
+          ]
         },
       ]
     },

@@ -8,7 +8,7 @@ function Header() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div>
             <Link to={'/'}>
-              <img src="../../public/ncfLogo1.png" className="h-12" alt="NCF Logo" />
+              <img src="../ncfLogo1.png" className="h-12" alt="NCF Logo" />
             </Link>
           </div>
           <div>
