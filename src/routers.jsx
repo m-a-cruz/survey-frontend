@@ -8,6 +8,7 @@ import Dashboard from './components/dashboard';
 import Survey from './components/survey';
 import Login from './components/login';
 import Notfound from './components/notfound';
+import Questions from './components/questions';
 
   const routers = createBrowserRouter([
   
@@ -42,6 +43,10 @@ import Notfound from './components/notfound';
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/question",
+      element: <Questions />,
     },
     {
       path: "*",
