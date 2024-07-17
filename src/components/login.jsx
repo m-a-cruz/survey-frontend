@@ -30,7 +30,8 @@ function login() {
     const user = users.find(user => user.email === userGbox);
     // console.log(user);
     if (user) {
-      if (user.status_id === 1) {
+      if (user.status_id === 2) {
+        localStorage.setItem('id', user.id);
         navigate('/survey');
       } else {
         alert('User has already taken the survey!');
@@ -41,9 +42,28 @@ function login() {
     }
   }
 
-  
+  // const handleStatusUpdate = (event) => {
+  //   event.preventDefault();
+  //   const user = users.find(user => user.email === userGbox);
+  //   if (user) {
+  //     if (user.status_id === 2) {
+  //       const updatedUser = {
+  //         ...user,
+  //         email: user.email,
+  //         status_id: 1
 
-  
+  //       };
+  //       console.log(updatedUser);
+  //       axios.put(`http://localhost:3000/user-masterlist/masterlist/${user.id}`, updatedUser);
+  //       navigate('/survey');
+  //     } else {
+  //       alert('User has already taken the survey!');
+  //       navigate('/');
+  //     }
+  //   } else {
+  //     alert('User not found!');
+  //   }
+  // }
 
   return (
     <>

@@ -1,36 +1,80 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import './css/headerstyle.css';
 
-function Header() {
+const Header = () => {
+  const [isDashboardPage, setIsDashboardPage] = useState(false);
+  const [isDashboardDropdownOpen, setIsDashboardDropdownOpen] = useState(false);
+  const [isSurveyDropdownOpen, setIsSurveyDropdownOpen] = useState(false);
+  const [isSurveyPage, setIsSurveyPage] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsDashboardPage(location.pathname === '/dashboard');
+    setIsSurveyPage(location.pathname.includes('/survey'));
+  }, [location]);
+
+  const toggleDashboardDropdown = () => {
+    setIsDashboardDropdownOpen((prev) => !prev);
+    setIsSurveyDropdownOpen(false);
+  };
+
+  const toggleSurveyDropdown = () => {
+    setIsSurveyDropdownOpen((prev) => !prev);
+    setIsDashboardDropdownOpen(false);
+  };
+
+  const closeDropdowns = () => {
+    setIsDashboardDropdownOpen(false);
+    setIsSurveyDropdownOpen(false);
+  };
+
   return (
-    <>
-      <nav className="bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <div>
-            <Link to={'/'}>
-              <img src="../ncfLogo1.png" className="h-12" alt="NCF Logo" />
-            </Link>
+    <nav className="header-nav">
+      <div className="header-container">
+        <div>
+          <img src="/ncfLogo1.png" className="header-logo" alt="NCF Logo" />
+          <p className="header-title">COLLEGE OF COMPUTER STUDIES</p>
+        </div>
+        <div className="header-actions">
+          <div className="relative">
+            {isDashboardPage ? (
+              <Link to="/" className="header-button">Back</Link>
+            ) : (
+              <button onClick={toggleDashboardDropdown} className={`header-button ${isDashboardDropdownOpen ? 'active' : ''}`} type="button">
+                Dashboard
+                <svg className="header-button-icon" aria-hidden="true" fill="none" viewBox="0 0 10 6">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                </svg>
+              </button>
+            )}
+            {isDashboardDropdownOpen && (
+              <div className="header-dropdown">
+                <Link to="/dashboard" onClick={closeDropdowns} className="header-dropdown-item">Dashboard</Link>
+              </div>
+            )}
           </div>
-          <div>
-            <span className='font-bold'>College of Computer Studies</span>
-          </div>
-          <div>
-            <div className="inline-flex items-center p-2 w-20 h-10 justify-center text-sm text-dark-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" id="navbar-default">
-              <Link to={'/dashboard'}>
-                <span>Dashboard</span>
-              </Link>
-            </div>
-            <div className="inline-flex items-center p-2 w-20 h-10 justify-center text-sm text-dark-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" id="navbar-default">
-              <Link to={'/login'}>
-                <span>Survey</span>
-              </Link>
-            </div>
+          <div className="relative">
+            {isSurveyPage ? (
+              <Link to="/" className="header-button">Back</Link>
+            ) : (
+              <button onClick={toggleSurveyDropdown} className={`header-button ${isSurveyDropdownOpen ? 'active' : ''}`} type="button">
+                Survey
+                <svg className="header-button-icon" aria-hidden="true" fill="none" viewBox="0 0 10 6">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                </svg>
+              </button>
+            )}
+            {isSurveyDropdownOpen && (
+              <div className="header-dropdown">
+                <Link to="/login" onClick={closeDropdowns} className="header-dropdown-item">Survey</Link>
+              </div>
+            )}
           </div>
         </div>
-      </nav>
-
-    </>
+      </div>
+    </nav>
   );
-}
+};
 
 export default Header;

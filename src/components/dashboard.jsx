@@ -1,14 +1,39 @@
-import '../Dashboard.css';
 import { useState } from 'react';
+import Modal from './Modal';
+import './css/Dashboard.css';
 
 function Dashboard() {
-  // DROPDOWN FUNCTION
-  const [dropdown, setDropdown] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [dropdownState, setDropdownState] = useState({
+    4: false,
+    5: false,
+    6: false, 
+    7: false,
+  });
 
-  const dropCategory = (id) => {
-    setDropdown(!dropdown);
-    setActiveCategory(id);
+  const [modalContent, setModalContent] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleDropdown = (id, content) => {
+    setDropdownState((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+    if (dropdownState[id]) {
+      setIsModalOpen(false);
+    } else {
+      setModalContent(content);
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setDropdownState({
+      4: false,
+      5: false,
+      6: false,
+      7: false,
+    });
   };
 
   const data = [
@@ -26,31 +51,38 @@ function Dashboard() {
         { id: 8, title: "MOST FREQUENTLY USE FACILITY/SERVICES", content: "Graph for E" },
         { id: 9, title: "STUDENT SENTIMENTS ON COLLEGE FACILITIES", content: "Graph for E" },
         { id: 10, title: "STUDENT SUGGESTIONS FOR IMPROVEMENT", content: "Graph for E" },
-      ]},
+      ],
+    },
     {
       id: 2,
       title: "DAILY STUDENT LIFE EXPERIENCES",
       categories: [
-        { id: 1, title: "TEACHING QUALITY AND INSTRUCTION", content: "Graph for C" },
-        { id: 2, title: "INSTRUCTOR ENGAGEMENT", content: "Graph for D" },
-        { id: 3, title: "COURSES AND PROGRAM", content: "Graph for D" },
-        { id: 4, title: "EXPERIENTIAL LEARNING PROGRAMS", content: "Graph for D" },
-        { id: 5, title: "WORKLOAD, ACTIVITIES AND ASSESSMENTS", content: "Graph for D" },
-        { id: 6, title: "LEARNING ENVIRONMENT", content: "Graph for D" },
-        { id: 7, title: "STUDENT SENTIMENTS ON CCS TEACHING QUALITY AND INSTRUCTION", content: "Graph for D" },
-      ]},
+        { id: 11, title: "TEACHING QUALITY AND INSTRUCTION", content: "Graph for C" },
+        { id: 12, title: "INSTRUCTOR ENGAGEMENT", content: "Graph for D" },
+        { id: 13, title: "COURSES AND PROGRAM", content: "Graph for D" },
+        { id: 14, title: "EXPERIENTIAL LEARNING PROGRAMS", content: "Graph for D" },
+        { id: 15, title: "WORKLOAD, ACTIVITIES AND ASSESSMENTS", content: "Graph for D" },
+        { id: 16, title: "LEARNING ENVIRONMENT", content: "Graph for D" },
+        { id: 17, title: "STUDENT SENTIMENTS ON CCS TEACHING QUALITY AND INSTRUCTION", content: "Graph for D" },
+      ],
+    },
     {
       id: 3,
       title: "EFFECTIVENESS OF SERVICES TOWARDS STUDENT NEEDS",
       categories: [
-        { id: 1, title: "ON ACADEMIC GROWTH AND DEVELOPMENT", content: "Graph for E" },
-        { id: 2, title: "ON PERSONAL GROWTH AND DEVELOPMENT", content: "Graph for E" },
-        { id: 3, title: "STUDENT SENTIMENTS TOWARDS THE LRC", content: "Graph for E" },
-        { id: 4, title: "STUDENTS SENTIMENTS TOWARDS THE GTC", content: "Graph for E" },
-        { id: 5, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
-        { id: 6, title: "STUDY HABITS CHALLENGES AND FACTORS", content: "Graph for E" },
-        { id: 7, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },  
-      ]},
+        { id: 18, title: "ON ACADEMIC GROWTH AND DEVELOPMENT", content: "Graph for E" },
+        { id: 19, title: "ON PERSONAL GROWTH AND DEVELOPMENT", content: "Graph for E" },
+        { id: 20, title: "STUDENT SENTIMENTS TOWARDS THE LRC", content: "Graph for E" },
+        { id: 21, title: "STUDENTS SENTIMENTS TOWARDS THE GTC", content: "Graph for E" },
+        { id: 22, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
+        { id: 23, title: "STUDY HABITS CHALLENGES AND FACTORS", content: "Graph for E" },
+        { id: 24, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
+      ],
+    },
+    { id: 4, title: "STUDY HABITS CHALLENGES AND FACTORS", categories: [] },
+    { id: 5, title: "STUDENTS PLANS AFTER GRADUATION", categories: [] },
+    { id: 6, title: "GENERAL IMPRESSION OF THE COLLEGE INSTRUCTORS", categories: [] },
+    { id: 7, title: "OTHER SUGGESTIONS FOR OVERALL STUDENT LIFE EXPERIENCES IMPROVEMENT", categories: [] },
   ];
 
   return (
@@ -58,22 +90,37 @@ function Dashboard() {
       <div className="dashboard-container">
         {data.map((header) => (
           <div key={header.id}>
-            <h2 className="dashboard-title">{header.title}</h2>
-            <div className="categories-container">
-              {header.categories.map((category) => (
-                <div className="button-wrapper" key={category.id}>
-                  <button onClick={() => dropCategory(category.id)} className="toggle-button">
-                    <span>{category.title}</span>
-                    <span className="toggle-icon">{dropdown && activeCategory === category.id ? '▼' : '▲'}</span>
-                  </button>
-                  {dropdown && activeCategory === category.id && (
-                    <div className="dropdown-content">{category.content}</div>
-                  )}
-                </div>
-              ))}
-            </div>
+            <h2
+              className="dashboard-title"
+              onClick={() => toggleDropdown(header.id, `Content for ${header.title}`)}
+              style={{ cursor: header.categories.length === 0 ? 'pointer' : 'default' }}
+            >
+              {header.title} {header.categories.length === 0 && (dropdownState[header.id] ? '▼' : '▲')}
+            </h2>
+            {header.categories.length > 0 ? (
+              <div className="categories-container">
+                {header.categories.map((category) => (
+                  <div className="button-wrapper" key={category.id}>
+                    <button onClick={() => toggleDropdown(category.id, category.content)} className="toggle-button">
+                      <span>{category.title}</span>
+                      <span className="toggle-icon">
+                        {dropdownState[category.id] ? '▼' : '▲'}
+                      </span>
+                    </button>
+                    {dropdownState[category.id] && (
+                      <div></div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              dropdownState[header.id] && (
+                <div></div>
+              )
+            )}
           </div>
         ))}
+        <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} />
       </div>
     </div>
   );
