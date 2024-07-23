@@ -157,6 +157,8 @@ const Survey = () => {
                                 ))
                             }
 
+
+                            {/* MA, PAADD AKO HERE NG PAGDISPLAY NG INSTRUCTION. i-CACALL MO NA LNG YUNG DATA. OKAY NA KAYAN ANG PAGFETCH. THANKS */}
                             {/* <div>
                                 <p className="instructions">{instructions[currentPage].instruction}</p>
                                 <p className="rating-scale">5 - Extremely <br />4 - Significantly<br />3 - Moderately <br />2 - Slightly <br />1 - Not at all </p>
@@ -213,7 +215,7 @@ const Survey = () => {
                                     </div>
                                 ))
                             }
-                            
+
                         </div>
 
                         <div className="button-container">
