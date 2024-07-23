@@ -27,16 +27,6 @@ import Questions from './components/questions';
         {
           path: "/survey/",
           element: <Survey />,
-          // children: [
-          //   {
-          //     path: "/survey/1",
-          //     element: <Survey1 />
-          //   },
-          //   {
-          //     path: "/survey/2",
-          //     element: <Survey2 />
-          //   },
-          // ]
         },
       ]
     },

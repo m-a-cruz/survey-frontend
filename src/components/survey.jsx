@@ -131,30 +131,12 @@ const Survey = () => {
                     <div className="title">{categories[currentPage].name}</div>
                     <form onSubmit={handleSubmit}>
                         <div className="line-border">
-                            {questions
-                                .filter(q => q.category_id === categories[currentPage].id)
+                        {questions
+                                .filter(q => q.category_id === categories[currentPage].id && q.question_type === 1)
                                 .map((q) => (
                                     <div className="question-row" key={q.id}>
                                         <p className="question">{q.question}</p>
-                                        <div className="scalability-options">
-                                            
-                                            {q.question_type === 2 && (
-                                                <div className="radio-buttons scale-labels">
-                                                    {[5, 4, 3, 2, 1].map((value) => (
-                                                        <label key={value}>
-                                                            <input
-                                                                type="radio"
-                                                                name={`question_${q.id}`}
-                                                                value={value}
-                                                                checked={formData[q.id] === String(value)}
-                                                                onChange={(e) => handleChange(e, q.id)}
-                                                                required
-                                                            />
-                                                            {value}
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                            )}
+                                        <div className="choices">
                                             {choices
                                                 .filter(c => c.question_id === q.id)
                                                 .map((c) => (
@@ -169,19 +151,69 @@ const Survey = () => {
                                                         />
                                                         {c.optionn}
                                                     </label>
-                                                ))}
-                                            {q.question_type === 3 && (
-                                                <input
-                                                    type="text"
-                                                    name={`question_${q.id}`}
-                                                    value={formData[q.id] || ''}
-                                                    onChange={(e) => handleChange(e, q.id)}
-                                                    required
-                                                />
-                                            )}
+                                                ))} 
                                         </div>
                                     </div>
-                                ))}
+                                ))
+                            }
+
+                            {/* <div>
+                                <p className="instructions">{instructions[currentPage].instruction}</p>
+                                <p className="rating-scale">5 - Extremely <br />4 - Significantly<br />3 - Moderately <br />2 - Slightly <br />1 - Not at all </p>
+                            </div>  */}
+
+                            {/* {questions
+                                .filter(q => q.category_id === categories[currentPage].id && q.instruction_id !== null)
+                                .map((q) => (
+                                    <div className="question-row" key={q.id}>
+                                        {q.intruction_id ? (
+                                            <div>
+                                                <p className="instructions">{instructions[q.intruction_id - 1].instruction}</p>
+                                                <p className="rating-scale">5 - Extremely <br />4 - Significantly<br />3 - Moderately <br />2 - Slightly <br />1 - Not at all </p>
+                                            </div>
+                                        ): null}
+                                    </div>
+                                ))
+                            } */}
+
+                            {questions
+                                .filter(q => q.category_id === categories[currentPage].id && q.question_type === 2)
+                                .map((q) => (
+                                        <div className="question-row" key={q.id}>
+                                        <p className="question">{q.question}</p>
+                                            {[5, 4, 3, 2, 1].map((value) => (
+                                                <label key={value}>
+                                                    <input
+                                                        type="radio"
+                                                        name={`question_${q.id}`}
+                                                        value={value}
+                                                        checked={formData[q.id] === String(value)}
+                                                        onChange={(e) => handleChange(e, q.id)}
+                                                        required
+                                                    />
+                                                    {value}
+                                                </label>
+                                            ))}
+                                        </div>
+                                ))
+                            }
+
+                            {questions
+                                .filter(q => q.category_id === categories[currentPage].id && q.question_type === 3)
+                                .map((q) => (
+                                    <div className="question-row" key={q.id}>
+                                        <p className="question">{q.question}</p>
+                                        <input
+                                            type="text"
+                                            name={`question_${q.id}`}
+                                            value={formData[q.id] || ''}
+                                            onChange={(e) => handleChange(e, q.id)}
+                                            required
+                                        />
+                                    </div>
+                                ))
+                            }
+                            
                         </div>
 
                         <div className="button-container">
