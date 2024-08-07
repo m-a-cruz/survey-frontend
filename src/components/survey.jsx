@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 const Survey = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({});
+    const [choicesResponses, setChoicesResponses] = useState([]);
+    const [scaleResponses, setScaleResponses] = useState([]);
+    const [textResponses, setTextResponses] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [questions, setQuestions] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -71,28 +74,59 @@ const Survey = () => {
         }
     };
 
-    const handleChange = (e, questionId) => {
+    const handleChange = (e, questionId, question_type) => {
         const { value } = e.target;
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [questionId]: value
-        }));
+
+            if(question_type === 1) {
+                setChoicesResponses(prevChoicesResponses => ({
+                    ...prevChoicesResponses,
+                    [questionId]: value
+                }));
+            }else if(question_type === 2) {
+                setScaleResponses(prevScaleResponses => ({
+                    ...prevScaleResponses,
+                    [questionId]: value
+                }));
+            }else if(question_type === 3) {
+                setTextResponses(prevTextResponses => ({
+                    ...prevTextResponses,
+                    [questionId]: value
+                }));
+            }
+        // setFormData(prevFormData => ({
+        //     ...prevFormData,
+        //     [questionId]: value  
+        // }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form Data Submitted:', formData);
 
-        const requests = Object.entries(formData).map(([key, value]) => {
+        const requests_choices = Object.entries(choicesResponses).map(([key, value]) => {
             const question_id = parseInt(key);
-            const answers = String(value);
+            const answer = value;
+            
+            const multipleChoice = axios.post('http://localhost:3000/choices-response/choice', { answer, question_id }, { withCredentials: true });
+           
+            return multipleChoice;
+        })
+        const requests_scale = Object.entries(scaleResponses).map(([key, value]) => {
+            const question_id = parseInt(key);
+            const answer = parseInt(value);
+            
+            const scale = axios.post('http://localhost:3000/scales-response/scale', { question_id, answer }, { withCredentials: true });
+            
+            return scale;
+        })
+        const requests_comment = Object.entries(textResponses).map(([key, value]) => {
+            const question_id = parseInt(key);
+            const answer = value;
 
-            return axios.post('http://localhost:3000/responses/response', { question_id, answers }, { withCredentials: true });
+            return axios.post('http://localhost:3000/comment-response/comment', { question_id, answer }, { withCredentials: true });
         });
 
         try {
-            await Promise.all(requests);
-            setFormData({});
+            await Promise.all(requests_choices, requests_scale, requests_comment);
             Swal.fire('Success', 'Your responses have been submitted!', 'success');
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -147,8 +181,8 @@ const Survey = () => {
                                                             type="radio"
                                                             name={`question_${q.id}`}
                                                             value={c.optionn}
-                                                            checked={formData[q.id] === c.optionn}
-                                                            onChange={(e) => handleChange(e, q.id)}
+                                                            checked={choicesResponses[q.id] === c.optionn}
+                                                            onChange={(e) => handleChange(e, q.id, q.question_type)}
                                                             required
                                                         />
                                                         {c.optionn}
@@ -171,8 +205,8 @@ const Survey = () => {
                                                         type="radio"
                                                         name={`question_${q.id}`}
                                                         value={value}
-                                                        checked={formData[q.id] === String(value)}
-                                                        onChange={(e) => handleChange(e, q.id)}
+                                                        checked={scaleResponses[q.id] === String(value)}
+                                                        onChange={(e) => handleChange(e, q.id, q.question_type)}
                                                         required
                                                     />
                                                     {value}
@@ -191,8 +225,8 @@ const Survey = () => {
                                         <input
                                             type="text"
                                             name={`question_${q.id}`}
-                                            value={formData[q.id] || ''}
-                                            onChange={(e) => handleChange(e, q.id)}
+                                            value={textResponses[q.id] || ''}
+                                            onChange={(e) => handleChange(e, q.id, q.question_type)}
                                             required
                                         />
                                     </div>
