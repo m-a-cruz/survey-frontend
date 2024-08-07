@@ -64,54 +64,54 @@ function Dashboard() {
     }
   };
 
-  const data = [
-    {
-      id: 1,
-      title: "ANALYTICS AND DISTRIBUTION OF RESPONSES",
-      categories: [
-        { id: 1, title: "BY PROGRAM", content: "Graph for A" },
-        { id: 2, title: "BY YEAR LEVEL", content: "Graph for B" },
-        { id: 3, title: "BY CLASSIFICATION", content: "Graph for C" },
-        { id: 4, title: "BY TYPE OF STUDENTS", content: "Graph for D" },
-        { id: 5, title: "FACTORS THAT CONTRIBUTE TO STUDENT SUCCESS", content: "Graph for E" },
-        { id: 6, title: "IMPORTANCE OF STUDENT SUPPORT", content: "Graph for E" },
-        { id: 7, title: "FACILITIES AND SERVICES USAGE", content: "Graph for E" },
-        { id: 8, title: "MOST FREQUENTLY USE FACILITY/SERVICES", content: "Graph for E" },
-        { id: 9, title: "STUDENT SENTIMENTS ON COLLEGE FACILITIES", content: "Graph for E" },
-        { id: 10, title: "STUDENT SUGGESTIONS FOR IMPROVEMENT", content: "Graph for E" },
-      ],
-    },
-    {
-      id: 2,
-      title: "DAILY STUDENT LIFE EXPERIENCES",
-      categories: [
-        { id: 11, title: "TEACHING QUALITY AND INSTRUCTION", content: "Graph for C" },
-        { id: 12, title: "INSTRUCTOR ENGAGEMENT", content: "Graph for D" },
-        { id: 13, title: "COURSES AND PROGRAM", content: "Graph for D" },
-        { id: 14, title: "EXPERIENTIAL LEARNING PROGRAMS", content: "Graph for D" },
-        { id: 15, title: "WORKLOAD, ACTIVITIES AND ASSESSMENTS", content: "Graph for D" },
-        { id: 16, title: "LEARNING ENVIRONMENT", content: "Graph for D" },
-        { id: 17, title: "STUDENT SENTIMENTS ON CCS TEACHING QUALITY AND INSTRUCTION", content: "Graph for D" },
-      ],
-    },
-    {
-      id: 3,
-      title: "EFFECTIVENESS OF SERVICES TOWARDS STUDENT NEEDS",
-      categories: [
-        { id: 18, title: "ON ACADEMIC GROWTH AND DEVELOPMENT", content: "Graph for E" },
-        { id: 19, title: "ON PERSONAL GROWTH AND DEVELOPMENT", content: "Graph for E" },
-        { id: 20, title: "STUDENT SENTIMENTS TOWARDS THE LRC", content: "Graph for E" },
-        { id: 21, title: "STUDENTS SENTIMENTS TOWARDS THE GTC", content: "Graph for E" },
-        { id: 22, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
-        { id: 23, title: "STUDY HABITS CHALLENGES AND FACTORS", content: "Graph for E" },
-        { id: 24, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
-      ],
-    },
-    { id: 4, title: "STUDY HABITS CHALLENGES AND FACTORS", categories: [] },
-    { id: 5, title: "STUDENTS PLANS AFTER GRADUATION", categories: [] },
-    { id: 6, title: "GENERAL IMPRESSION OF THE COLLEGE INSTRUCTORS", categories: [] },
-    { id: 7, title: "OTHER SUGGESTIONS FOR OVERALL STUDENT LIFE EXPERIENCES IMPROVEMENT", categories: [] },
-  ];
+  // const data = [
+  //   {
+  //     id: 1,
+  //     title: "ANALYTICS AND DISTRIBUTION OF RESPONSES",
+  //     categories: [
+  //       { id: 1, title: "BY PROGRAM", content: "Graph for A" },
+  //       { id: 2, title: "BY YEAR LEVEL", content: "Graph for B" },
+  //       { id: 3, title: "BY CLASSIFICATION", content: "Graph for C" },
+  //       { id: 4, title: "BY TYPE OF STUDENTS", content: "Graph for D" },
+  //       { id: 5, title: "FACTORS THAT CONTRIBUTE TO STUDENT SUCCESS", content: "Graph for E" },
+  //       { id: 6, title: "IMPORTANCE OF STUDENT SUPPORT", content: "Graph for E" },
+  //       { id: 7, title: "FACILITIES AND SERVICES USAGE", content: "Graph for E" },
+  //       { id: 8, title: "MOST FREQUENTLY USE FACILITY/SERVICES", content: "Graph for E" },
+  //       { id: 9, title: "STUDENT SENTIMENTS ON COLLEGE FACILITIES", content: "Graph for E" },
+  //       { id: 10, title: "STUDENT SUGGESTIONS FOR IMPROVEMENT", content: "Graph for E" },
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "DAILY STUDENT LIFE EXPERIENCES",
+  //     categories: [
+  //       { id: 11, title: "TEACHING QUALITY AND INSTRUCTION", content: "Graph for C" },
+  //       { id: 12, title: "INSTRUCTOR ENGAGEMENT", content: "Graph for D" },
+  //       { id: 13, title: "COURSES AND PROGRAM", content: "Graph for D" },
+  //       { id: 14, title: "EXPERIENTIAL LEARNING PROGRAMS", content: "Graph for D" },
+  //       { id: 15, title: "WORKLOAD, ACTIVITIES AND ASSESSMENTS", content: "Graph for D" },
+  //       { id: 16, title: "LEARNING ENVIRONMENT", content: "Graph for D" },
+  //       { id: 17, title: "STUDENT SENTIMENTS ON CCS TEACHING QUALITY AND INSTRUCTION", content: "Graph for D" },
+  //     ],
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "EFFECTIVENESS OF SERVICES TOWARDS STUDENT NEEDS",
+  //     categories: [
+  //       { id: 18, title: "ON ACADEMIC GROWTH AND DEVELOPMENT", content: "Graph for E" },
+  //       { id: 19, title: "ON PERSONAL GROWTH AND DEVELOPMENT", content: "Graph for E" },
+  //       { id: 20, title: "STUDENT SENTIMENTS TOWARDS THE LRC", content: "Graph for E" },
+  //       { id: 21, title: "STUDENTS SENTIMENTS TOWARDS THE GTC", content: "Graph for E" },
+  //       { id: 22, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
+  //       { id: 23, title: "STUDY HABITS CHALLENGES AND FACTORS", content: "Graph for E" },
+  //       { id: 24, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
+  //     ],
+  //   },
+  //   { id: 4, title: "STUDY HABITS CHALLENGES AND FACTORS", categories: [] },
+  //   { id: 5, title: "STUDENTS PLANS AFTER GRADUATION", categories: [] },
+  //   { id: 6, title: "GENERAL IMPRESSION OF THE COLLEGE INSTRUCTORS", categories: [] },
+  //   { id: 7, title: "OTHER SUGGESTIONS FOR OVERALL STUDENT LIFE EXPERIENCES IMPROVEMENT", categories: [] },
+  // ];
 
   return (
     <div className="dashboard-wrapper">
