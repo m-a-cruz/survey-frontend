@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Modal from './Modal';
 import './css/Dashboard.css';
 
@@ -12,6 +13,8 @@ function Dashboard() {
 
   const [modalContent, setModalContent] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dataAnalysis, setDataAnalysis] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
   const toggleDropdown = (id, content) => {
     setDropdownState((prevState) => ({
@@ -34,6 +37,31 @@ function Dashboard() {
       6: false,
       7: false,
     });
+  };
+
+  useEffect(() => {
+    fetchDataAnalysis();
+    fetchSubcategories();
+  }, []);
+
+  const fetchDataAnalysis = async () => {
+    try {
+        const { data } = await axios.get('http://localhost:3000/data-analysis/analysis');
+        setDataAnalysis(data);
+        // console.log(data);
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+    }
+  };
+
+  const fetchSubcategories = async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:3000/subcategories/subcategories`);
+      setSubcategories(data);
+      // console.log(data);
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+    }
   };
 
   const data = [
@@ -88,12 +116,43 @@ function Dashboard() {
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-container">
-        {data.map((header) => (
+        {dataAnalysis.map((header) => (
+          <div key={header.id}>
+            <h2
+              className='dashboard-title'
+              // onClick={() => toggleDropdown(header.id, `Content for ${header.title}`)}
+              // style={{ cursor: header.categories.length === 0 ? 'pointer' : 'default' }}
+            >
+              {header.title} {(dropdownState[header.id] ? '▼' : '▲')}
+            </h2>
+
+            {subcategories.filter((subcategory) => subcategory.analysis_id === header.id).map((subcategory) => (
+              <div className='buttion-wrapper' key={subcategory.id}>
+                <button
+                  onClick={() => toggleDropdown(subcategory.id, subcategory.content)}
+                  className='toggle-button'
+                >
+                  <span>{subcategory.subcategory}</span>
+                  <span className='toggle-icon'>
+                    {dropdownState[subcategory.id] ? '▼' : '▲'}
+                  </span>
+                </button>
+                {dropdownState[subcategory.id] && (
+                  <div>Content</div>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+
+
+
+        {/* {data.map((header) => (
           <div key={header.id}>
             <h2
               className="dashboard-title"
-              onClick={() => toggleDropdown(header.id, `Content for ${header.title}`)}
-              style={{ cursor: header.categories.length === 0 ? 'pointer' : 'default' }}
+              // onClick={() => toggleDropdown(header.id, `Content for ${header.title}`)}
+              // style={{ cursor: header.categories.length === 0 ? 'pointer' : 'default' }}
             >
               {header.title} {header.categories.length === 0 && (dropdownState[header.id] ? '▼' : '▲')}
             </h2>
@@ -119,8 +178,8 @@ function Dashboard() {
               )
             )}
           </div>
-        ))}
-        <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} />
+        ))} */}
+        {/* <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} /> */}
       </div>
     </div>
   );

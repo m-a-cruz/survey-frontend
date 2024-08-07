@@ -33,7 +33,7 @@ const Survey = () => {
     };
 
     const fetchCategories = async () => {
-        try {
+        try { 
             const { data } = await axios.get('http://localhost:3000/categories/categories');
             setCategories(data);
         } catch (error) {
@@ -131,7 +131,9 @@ const Survey = () => {
                     <div className="title">{categories[currentPage].name}</div>
                     <form onSubmit={handleSubmit}>
                         <div className="line-border">
-                        {questions
+
+                            {/* QUESTIONS WITH MULTIPLE CHOICE */}
+                            {questions
                                 .filter(q => q.category_id === categories[currentPage].id && q.question_type === 1)
                                 .map((q) => (
                                     <div className="question-row" key={q.id}>
@@ -157,27 +159,7 @@ const Survey = () => {
                                 ))
                             }
 
-
-                            {/* MA, PAADD AKO HERE NG PAGDISPLAY NG INSTRUCTION. i-CACALL MO NA LNG YUNG DATA. OKAY NA KAYAN ANG PAGFETCH. THANKS */}
-                            {/* <div>
-                                <p className="instructions">{instructions[currentPage].instruction}</p>
-                                <p className="rating-scale">5 - Extremely <br />4 - Significantly<br />3 - Moderately <br />2 - Slightly <br />1 - Not at all </p>
-                            </div>  */}
-
-                            {/* {questions
-                                .filter(q => q.category_id === categories[currentPage].id && q.instruction_id !== null)
-                                .map((q) => (
-                                    <div className="question-row" key={q.id}>
-                                        {q.intruction_id ? (
-                                            <div>
-                                                <p className="instructions">{instructions[q.intruction_id - 1].instruction}</p>
-                                                <p className="rating-scale">5 - Extremely <br />4 - Significantly<br />3 - Moderately <br />2 - Slightly <br />1 - Not at all </p>
-                                            </div>
-                                        ): null}
-                                    </div>
-                                ))
-                            } */}
-
+                            {/* QUESTIONS WITH SCALE */}
                             {questions
                                 .filter(q => q.category_id === categories[currentPage].id && q.question_type === 2)
                                 .map((q) => (
@@ -200,6 +182,7 @@ const Survey = () => {
                                 ))
                             }
 
+                            {/* QUESTIONS WITH TEXT/COMMENT */}
                             {questions
                                 .filter(q => q.category_id === categories[currentPage].id && q.question_type === 3)
                                 .map((q) => (
