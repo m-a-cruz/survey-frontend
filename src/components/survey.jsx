@@ -194,7 +194,33 @@ const Survey = () => {
                             }
 
                             {/* QUESTIONS WITH SCALE */}
-                            {questions
+                            {instructions.filter(i => i.category_id === categories[currentPage].id).map((i) => (
+                                <div key={i.id}>
+                                    <p>{i.instruction}</p>
+                                    {questions
+                                        .filter(q => q.category_id === categories[currentPage].id && q.question_type === 2)
+                                        .map((q) => (
+                                            <div className="question-row" key={q.id}>
+                                                <p className="question">{q.question}</p>
+                                                    {[5, 4, 3, 2, 1].map((value) => (
+                                                        <label key={value}>
+                                                            <input
+                                                                type="radio"
+                                                                name={`question_${q.id}`}
+                                                                value={value}
+                                                                checked={scaleResponses[q.id] === String(value)}
+                                                                onChange={(e) => handleChange(e, q.id, q.question_type)}
+                                                                required
+                                                            />
+                                                            {value}
+                                                        </label>
+                                                    ))}
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            ))}
+                            {/* {questions
                                 .filter(q => q.category_id === categories[currentPage].id && q.question_type === 2)
                                 .map((q) => (
                                         <div className="question-row" key={q.id}>
@@ -214,7 +240,7 @@ const Survey = () => {
                                             ))}
                                         </div>
                                 ))
-                            }
+                            } */}
 
                             {/* QUESTIONS WITH TEXT/COMMENT */}
                             {questions
