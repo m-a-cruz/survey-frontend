@@ -82,9 +82,9 @@ function login() {
               className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Gbox Account" />
             </div>
           </form>
-          <div onClick={handleLogin} className="mt-5 max-w-sm mx-auto text-dark-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+          {/* <div onClick={handleLogin} className="mt-5 max-w-sm mx-auto text-dark-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
             <span>Start</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
