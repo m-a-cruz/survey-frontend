@@ -2,12 +2,32 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Modal from './Modal';
 import './css/Dashboard.css';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from 'chart.js';
+import { Doughnut, Bar, Pie } from 'react-chartjs-2';
+
+// Register Chart.js components
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 function Dashboard() {
   const [dropdownState, setDropdownState] = useState({
     4: false,
     5: false,
-    6: false, 
+    6: false,
     7: false,
   });
 
@@ -15,6 +35,20 @@ function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dataAnalysis, setDataAnalysis] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [choices, setChoices] = useState([]);
+  const [choicesResponses, setChoicesResponse] = useState([]);
+  const [scaleResponses, setScaleResponses] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [filteredDataChoices, setFilteredDataChoices] = useState([]);
+  const [filteredDataScale, setFilteredDataScale] = useState([]);
+
+  const scaleLabels = [
+    { id: 1, label: 'Extremely', value: 1 },
+    { id: 2, label: 'Significantly', value: 2 },
+    { id: 3, label: 'Neutral', value: 3 },
+    { id: 4, label: 'Slightly', value: 4 },
+    { id: 5, label: 'Not at all', value: 5 },
+  ];
 
   const toggleDropdown = (id, content) => {
     setDropdownState((prevState) => ({
@@ -42,76 +76,103 @@ function Dashboard() {
   useEffect(() => {
     fetchDataAnalysis();
     fetchSubcategories();
+    fetchScaleResponses();
+    fetchChoices();
+    fetchChoicesResponses();
+    fetchQuestions();
   }, []);
 
   const fetchDataAnalysis = async () => {
     try {
-        const { data } = await axios.get('http://localhost:3000/data-analysis/analysis');
-        setDataAnalysis(data);
-        // console.log(data);
+      const { data } = await axios.get('http://localhost:3000/data-analysis/analysis');
+      setDataAnalysis(data);
     } catch (error) {
-        console.error('Error fetching questions:', error);
+      console.error('Error fetching data analysis:', error);
     }
   };
 
   const fetchSubcategories = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:3000/subcategories/subcategories`);
+      const { data } = await axios.get('http://localhost:3000/subcategories/subcategories');
       setSubcategories(data);
-      // console.log(data);
     } catch (error) {
       console.error('Error fetching subcategories:', error);
     }
   };
 
-  // const data = [
-  //   {
-  //     id: 1,
-  //     title: "ANALYTICS AND DISTRIBUTION OF RESPONSES",
-  //     categories: [
-  //       { id: 1, title: "BY PROGRAM", content: "Graph for A" },
-  //       { id: 2, title: "BY YEAR LEVEL", content: "Graph for B" },
-  //       { id: 3, title: "BY CLASSIFICATION", content: "Graph for C" },
-  //       { id: 4, title: "BY TYPE OF STUDENTS", content: "Graph for D" },
-  //       { id: 5, title: "FACTORS THAT CONTRIBUTE TO STUDENT SUCCESS", content: "Graph for E" },
-  //       { id: 6, title: "IMPORTANCE OF STUDENT SUPPORT", content: "Graph for E" },
-  //       { id: 7, title: "FACILITIES AND SERVICES USAGE", content: "Graph for E" },
-  //       { id: 8, title: "MOST FREQUENTLY USE FACILITY/SERVICES", content: "Graph for E" },
-  //       { id: 9, title: "STUDENT SENTIMENTS ON COLLEGE FACILITIES", content: "Graph for E" },
-  //       { id: 10, title: "STUDENT SUGGESTIONS FOR IMPROVEMENT", content: "Graph for E" },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "DAILY STUDENT LIFE EXPERIENCES",
-  //     categories: [
-  //       { id: 11, title: "TEACHING QUALITY AND INSTRUCTION", content: "Graph for C" },
-  //       { id: 12, title: "INSTRUCTOR ENGAGEMENT", content: "Graph for D" },
-  //       { id: 13, title: "COURSES AND PROGRAM", content: "Graph for D" },
-  //       { id: 14, title: "EXPERIENTIAL LEARNING PROGRAMS", content: "Graph for D" },
-  //       { id: 15, title: "WORKLOAD, ACTIVITIES AND ASSESSMENTS", content: "Graph for D" },
-  //       { id: 16, title: "LEARNING ENVIRONMENT", content: "Graph for D" },
-  //       { id: 17, title: "STUDENT SENTIMENTS ON CCS TEACHING QUALITY AND INSTRUCTION", content: "Graph for D" },
-  //     ],
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "EFFECTIVENESS OF SERVICES TOWARDS STUDENT NEEDS",
-  //     categories: [
-  //       { id: 18, title: "ON ACADEMIC GROWTH AND DEVELOPMENT", content: "Graph for E" },
-  //       { id: 19, title: "ON PERSONAL GROWTH AND DEVELOPMENT", content: "Graph for E" },
-  //       { id: 20, title: "STUDENT SENTIMENTS TOWARDS THE LRC", content: "Graph for E" },
-  //       { id: 21, title: "STUDENTS SENTIMENTS TOWARDS THE GTC", content: "Graph for E" },
-  //       { id: 22, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
-  //       { id: 23, title: "STUDY HABITS CHALLENGES AND FACTORS", content: "Graph for E" },
-  //       { id: 24, title: "STUDENT SUPPORT SUGGESTIONS", content: "Graph for E" },
-  //     ],
-  //   },
-  //   { id: 4, title: "STUDY HABITS CHALLENGES AND FACTORS", categories: [] },
-  //   { id: 5, title: "STUDENTS PLANS AFTER GRADUATION", categories: [] },
-  //   { id: 6, title: "GENERAL IMPRESSION OF THE COLLEGE INSTRUCTORS", categories: [] },
-  //   { id: 7, title: "OTHER SUGGESTIONS FOR OVERALL STUDENT LIFE EXPERIENCES IMPROVEMENT", categories: [] },
-  // ];
+  const fetchChoices = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/choices/choices');
+      const choices = await response.json();
+      setChoices(choices);
+    } catch (error) {
+      console.error('Error fetching choices:', error);
+    }
+  };
+
+  const fetchChoicesResponses = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/choices-response/choices');
+      const data = await response.json();
+      setChoicesResponse(data);
+    } catch (error) {
+      console.error('Error fetching choices responses:', error);
+    }
+  };
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/questions/questions');
+      const questions = await response.json();
+      setQuestions(questions);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
+  };
+
+  const fetchScaleResponses = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/scales-response/scales');
+      const data = await response.json();
+      setScaleResponses(data);
+    } catch (error) {
+      console.error('Error fetching scale responses:', error);
+    }
+  };
+
+  useEffect(() => {
+    // FOR MULTIPLE CHOICES || QUESTION TYPE 1
+    if (choices.length && choicesResponses.length) {
+      const updatedFilteredChoices = choices.map((choice) => {
+        const dataCount = choicesResponses.reduce((ac, entry) => {
+          if (entry.answers === choice.optionn && entry.question_id === choice.question_id) {
+            ac[choice.optionn] = (ac[choice.optionn] || 0) + 1;
+          }
+          return ac;
+        }, {});
+        return { label: choice.optionn, count: dataCount[choice.optionn] || 0, question_id: choice.question_id };
+      });
+      setFilteredDataChoices(updatedFilteredChoices);
+    }
+
+    // FOR SCALES || QUESTION TYPE 2
+    if (scaleResponses.length && scaleLabels.length) {
+      const updatedFilteredScales = questions
+        .filter((question) => question.question_type === 2)
+        .map((question) =>
+          scaleLabels.map((scaleLabel) => {
+            const dataCount = scaleResponses.reduce((ac, entry) => {
+              if (entry.answer === scaleLabel.value && entry.question_id === question.id) {
+                ac[scaleLabel.value] = (ac[scaleLabel.value] || 0) + 1;
+              }
+              return ac;
+            }, {});
+            return { label: scaleLabel.label, count: dataCount[scaleLabel.value] || 0, question_id: question.id };
+          })
+        ).flat();
+      setFilteredDataScale(updatedFilteredScales);
+    }
+  }, [choices, choicesResponses, scaleResponses, questions]);
 
   return (
     <div className="dashboard-wrapper">
@@ -119,67 +180,130 @@ function Dashboard() {
         {dataAnalysis.map((header) => (
           <div key={header.id}>
             <h2
-              className='dashboard-title'
-              // onClick={() => toggleDropdown(header.id, `Content for ${header.title}`)}
-              // style={{ cursor: header.categories.length === 0 ? 'pointer' : 'default' }}
+              className="dashboard-title"
+              onClick={() => toggleDropdown(header.id, `Content for ${header.title}`)}
+              style={{ cursor: 'pointer' }}
             >
-              {header.title} {(dropdownState[header.id] ? '▼' : '▲')}
+              {header.title} {dropdownState[header.id] ? '▼' : '▲'}
             </h2>
 
-            {subcategories.filter((subcategory) => subcategory.analysis_id === header.id).map((subcategory) => (
-              <div className='buttion-wrapper' key={subcategory.id}>
-                <button
-                  onClick={() => toggleDropdown(subcategory.id, subcategory.content)}
-                  className='toggle-button'
-                >
-                  <span>{subcategory.subcategory}</span>
-                  <span className='toggle-icon'>
-                    {dropdownState[subcategory.id] ? '▼' : '▲'}
-                  </span>
-                </button>
-                {dropdownState[subcategory.id] && (
-                  <div>Content</div>
-                )}
-              </div>
-            ))}
+            {subcategories
+              .filter((subcategory) => subcategory.analysis_id === header.id)
+              .map((subcategory) => (
+                <div className="categories-container">
+                <div className="button-wrapper" key={subcategory.id}>
+                  <button
+                    onClick={() => toggleDropdown(subcategory.id, subcategory.content)}
+                    className="toggle-button"
+                  >
+                    <span>{subcategory.subcategory}</span>
+                    <span className="toggle-icon">
+                      {dropdownState[subcategory.id] ? '▼' : '▲'}
+                    </span>
+                  </button>
+                  {dropdownState[subcategory.id] && (
+                    <div>
+                      {questions
+                        .filter(
+                          (question) =>
+                            question.subcategory_id === subcategory.id
+                        )
+                        .map((question) => (
+                          (question.question_type === 1) ? (
+                            <div key={question.id}>
+                              <Pie
+                                options={{
+                                  maintainAspectRatio: false,
+                                }}
+                                width={400}
+                                height={400}
+                                data={{
+                                  labels: filteredDataChoices
+                                    .filter((item) => item.question_id === question.id)
+                                    .map((item) => item.label.split(':')[0]),
+                                  datasets: [
+                                    {
+                                      data: filteredDataChoices
+                                        .filter((item) => item.question_id === question.id)
+                                        .map((item) => item.count),
+                                      backgroundColor: [
+                                        'rgba(43, 63, 229, 0.8)',
+                                        'rgba(250, 192, 19, 0.8)',
+                                        'rgba(253, 135, 135, 0.8)',
+                                        'rgba(255, 99, 132, 0.8)',
+                                        'rgba(54, 162, 235, 0.8)',
+                                        'rgba(255, 206, 86, 0.8)',
+                                        'rgba(75, 192, 192, 0.8)',
+                                        'rgba(153, 102, 255, 0.8)',
+                                      ],
+                                      borderColor: [
+                                        'rgba(43, 63, 229, 1)',
+                                        'rgba(250, 192, 19, 1)',
+                                        'rgba(253, 135, 135, 1)',
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                      ],
+                                      borderWidth: 1,
+                                    },
+                                  ],
+                                }}
+                              />
+                            </div>  
+                          ) : (
+                            <div key={question.id}>
+                              <Pie
+                                options={{
+                                  maintainAspectRatio: false,
+                                }}
+                                width={400}
+                                height={400}
+                                data={{
+                                  labels: filteredDataScale
+                                    .filter((item) => item.question_id === question.id)
+                                    .map((item) => item.label),
+                                  datasets: [
+                                    {
+                                      data: filteredDataScale
+                                        .filter((item) => item.question_id === question.id)
+                                        .map((item) => item.count),
+                                      backgroundColor: [
+                                        'rgba(43, 63, 229, 0.8)',
+                                        'rgba(250, 192, 19, 0.8)',
+                                        'rgba(253, 135, 135, 0.8)',
+                                        'rgba(255, 99, 132, 0.8)',
+                                        'rgba(54, 162, 235, 0.8)',
+                                        'rgba(255, 206, 86, 0.8)',
+                                        'rgba(75, 192, 192, 0.8)',
+                                        'rgba(153, 102, 255, 0.8)',
+                                      ],
+                                      borderColor: [
+                                        'rgba(43, 63, 229, 1)',
+                                        'rgba(250, 192, 19, 1)',
+                                        'rgba(253, 135, 135, 1)',
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                      ],
+                                      borderWidth: 1,
+                                    },
+                                  ],
+                                }}
+                              />
+                            </div>
+                          )
+                        ))}
+                    </div>
+                  )}
+                </div>
+                </div>
+              ))}
           </div>
         ))}
-
-
-
-        {/* {data.map((header) => (
-          <div key={header.id}>
-            <h2
-              className="dashboard-title"
-              // onClick={() => toggleDropdown(header.id, `Content for ${header.title}`)}
-              // style={{ cursor: header.categories.length === 0 ? 'pointer' : 'default' }}
-            >
-              {header.title} {header.categories.length === 0 && (dropdownState[header.id] ? '▼' : '▲')}
-            </h2>
-            {header.categories.length > 0 ? (
-              <div className="categories-container">
-                {header.categories.map((category) => (
-                  <div className="button-wrapper" key={category.id}>
-                    <button onClick={() => toggleDropdown(category.id, category.content)} className="toggle-button">
-                      <span>{category.title}</span>
-                      <span className="toggle-icon">
-                        {dropdownState[category.id] ? '▼' : '▲'}
-                      </span>
-                    </button>
-                    {dropdownState[category.id] && (
-                      <div></div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              dropdownState[header.id] && (
-                <div></div>
-              )
-            )}
-          </div>
-        ))} */}
-        {/* <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent} /> */}
       </div>
     </div>
   );

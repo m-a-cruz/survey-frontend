@@ -6,6 +6,20 @@
     padding: 20px;
     box-sizing: border-box;
   }
+  .chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows multiple rows if needed */
+    gap: 20px; /* Optional: adds space between charts */
+  }
+  
+  .chart-item {
+    flex: 1 1 300px; /* Grows to fill available space, with a minimum width */
+    max-width: 300px; /* Ensures charts don’t become too large */
+    margin: 10px; /* Optional: adds margin around each chart */
+  }
+  
   
   .dashboard-container {
     display: flex;
